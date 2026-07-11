@@ -23,7 +23,14 @@ def load_session(season: int, gp: int, session: str) -> Optional[fastf1.core.Ses
         s.load(telemetry=True, weather=True, messages=True, laps=True)
         return s
     except Exception as e:
-        log.debug("FastF1 load failed: %s", e)
+        # This used to be log.debug(), which is essentially invisible —
+        # Streamlit Cloud's log viewer doesn't show DEBUG-level messages
+        # by default, so a failure here looked like "no error at all"
+        # even though something real was going wrong. log.error() (and
+        # the print() as a belt-and-suspenders, since Cloud's log viewer
+        # captures stdout too) makes the actual reason show up.
+        log.error("FastF1 load_session(%s, %s, %s) failed: %s", season, gp, session, e)
+        print(f"[FastF1] load_session({season}, {gp}, {session}) failed: {e!r}")
         return None
 
 
@@ -34,7 +41,8 @@ def load_session_basic(season: int, gp: int, session: str) -> Optional[fastf1.co
         s.load(telemetry=False, weather=True, messages=True, laps=True)
         return s
     except Exception as e:
-        log.debug("FastF1 basic load failed: %s", e)
+        log.error("FastF1 load_session_basic(%s, %s, %s) failed: %s", season, gp, session, e)
+        print(f"[FastF1] load_session_basic({season}, {gp}, {session}) failed: {e!r}")
         return None
 
 
