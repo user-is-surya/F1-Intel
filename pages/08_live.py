@@ -295,7 +295,7 @@ Your goal is to respond exactly as a senior Formula 1 race engineer or technical
                     with st.spinner("Thinking…"):
                         history_for_api = st.session_state.live_chat_history[:-1][-8:]
                         api_messages = history_for_api + [{"role": "user", "text": user_q.strip()}]
-                        result = generate_chat_reply(api_messages, system_instruction=CHAT_SYSTEM_PROMPT)
+                        result = generate_chat_reply(api_messages, system_instruction=CHAT_SYSTEM_PROMPT, use_search=True)
                     if result["ok"]:
                         st.markdown(result["text"])
                         st.session_state.live_chat_history.append({"role": "assistant", "text": result["text"]})
