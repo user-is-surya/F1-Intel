@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d3ac9529-47df-49fd-8dd6-bcd660a39532" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/F1Intel v3.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.streamlit/config.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/circuit_card.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/countdown.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/driver_card.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/kpi_cards.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/live_leaderboard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/sidebar.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/standings_table.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/strategy_charts.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/team_card.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/telemetry_charts.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/track_map.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/teams.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/01_standings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/02_drivers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/03_teams.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/04_circuits.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/05_race_analysis.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/06_telemetry.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/07_strategy.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/08_live.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/10_historical.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/11_power_rankings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/cache_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/fastf1_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/jolpica_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/openf1_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/weather_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/colors.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/flags.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/formatters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/helpers.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/3735c755-532d-4ee5-81c1-01b271a2ab49_F1Intel (22).zip.b49/.streamlit/secrets.toml.example" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/pages/11_power_rankings.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3F1cMT0VTGM76z1cu1voQ4gVraK" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-c59985aa861c-c2ffad84badb-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.24374.152" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d3ac9529-47df-49fd-8dd6-bcd660a39532" name="Changes" comment="" />
+      <created>1781245967797</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1781245967797</updated>
+      <workItem from="1781245968899" duration="5758000" />
+      <workItem from="1781253603759" duration="464000" />
+      <workItem from="1781262217732" duration="1365000" />
+      <workItem from="1781315832903" duration="616000" />
+      <workItem from="1781316531811" duration="4464000" />
+      <workItem from="1781340654330" duration="2326000" />
+      <workItem from="1781418105893" duration="2924000" />
+      <workItem from="1781443714121" duration="1551000" />
+      <workItem from="1781446408736" duration="1486000" />
+      <workItem from="1781486847653" duration="2438000" />
+      <workItem from="1781508838897" duration="1435000" />
+      <workItem from="1781526784106" duration="2865000" />
+      <workItem from="1781577776595" duration="2507000" />
+      <workItem from="1781617232492" duration="1248000" />
+      <workItem from="1781747636537" duration="2140000" />
+      <workItem from="1781846002389" duration="3078000" />
+      <workItem from="1781924583463" duration="2552000" />
+      <workItem from="1781946332094" duration="2567000" />
+      <workItem from="1782091490176" duration="2636000" />
+      <workItem from="1782200420636" duration="39000" />
+      <workItem from="1782473229588" duration="667000" />
+      <workItem from="1782555249616" duration="662000" />
+      <workItem from="1782558057311" duration="2543000" />
+      <workItem from="1782783630249" duration="1855000" />
+      <workItem from="1783077436908" duration="656000" />
+      <workItem from="1783181024407" duration="586000" />
+      <workItem from="1783659597403" duration="1934000" />
+      <workItem from="1783741327259" duration="1196000" />
+      <workItem from="1783743274166" duration="2574000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

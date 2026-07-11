@@ -1,0 +1,376 @@
+/* ============================================================
+   F1Intel — Global Styles v5
+   ------------------------------------------------------------
+   Theme values (--bg-primary, --text-primary, etc.) are NOT
+   defined here. They're computed in Python (config/settings.py
+   THEMES dict) and injected as a `:root{...}` block by
+   utils/helpers.py::load_css() on every render, based on the
+   active theme in utils/theme.py. That's the ONLY source of
+   truth for color values — this file just consumes var(...)
+   everywhere, so there is no possibility of a stale/duplicated
+   variable definition fighting the real one (that mismatch was
+   the root cause of light mode being unreadable before).
+
+   A minimal :root fallback further down keeps things sane if
+   this file is ever loaded before the Python override block.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Fallback values only — real values are injected by load_css() */
+    --f1-red: #E10600; --f1-red-dark: #B80500;
+    --f1-gold: #FFD700; --f1-silver: #C0C0C0; --f1-bronze: #CD7F32;
+    --bg-primary: #0A0A0F; --bg-secondary: #13131A;
+    --bg-card: rgba(255,255,255,0.045); --bg-card-hover: rgba(255,255,255,0.075);
+    --bg-card-solid: #14141C;
+    --glass-border: rgba(255,255,255,0.09); --glass-accent: rgba(225,6,0,0.4);
+    --divider-soft: rgba(255,255,255,0.07); --overlay-soft: rgba(255,255,255,0.045);
+    --text-primary: #F5F6F8; --text-secondary: rgba(245,246,248,0.62);
+    --text-muted: rgba(245,246,248,0.4); --text-faint: rgba(245,246,248,0.24);
+    --chrome-text-primary: #F5F6F8; --chrome-text-secondary: rgba(245,246,248,0.62);
+    --grid-color: rgba(255,255,255,0.07);
+    --glow-red: 0 0 30px rgba(225,6,0,0.28);
+    --shadow-card: 0 12px 40px rgba(0,0,0,0.45);
+    --scrollbar-thumb: rgba(255,255,255,0.15);
+}
+
+/* ── Base ── */
+html, body, [data-testid="stApp"] {
+    background: var(--bg-primary) !important;
+    font-family: 'Inter', sans-serif !important;
+    color: var(--chrome-text-primary) !important;
+}
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"] {
+    background: var(--bg-primary) !important;
+}
+
+/* Subtle technical backdrop — a faint grid, purely decorative, cheap
+   (single CSS gradient, no images/requests) and low-contrast enough to
+   never fight readability in either theme. */
+[data-testid="stAppViewContainer"] {
+    background-image:
+        linear-gradient(var(--divider-soft) 1px, transparent 1px),
+        linear-gradient(90deg, var(--divider-soft) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    background-attachment: fixed;
+    opacity: 1;
+}
+[data-testid="stAppViewContainer"] > .main {
+    background: transparent !important;
+}
+
+/* ── Hide default Streamlit chrome (but NOT sidebar controls) ── */
+#MainMenu, footer { display: none !important; }
+[data-testid="stDecoration"] { display: none !important; }
+header[data-testid="stHeader"] { background: transparent !important; }
+
+/* ── Icon glyphs (Material Symbols) — NEVER force Inter onto these.
+   This is the fix for the sidebar collapse arrow showing literal text
+   like "keyboard_double_arrow_left" instead of the "«" icon: a later
+   `* { font-family: Inter !important }` rule was clobbering the
+   ligature font the icon glyph needs to render as a symbol. ── */
+[data-testid="stIconMaterial"],
+span[data-testid="stIconMaterial"],
+[data-testid="stSidebarCollapseButton"] span,
+[data-testid="stSidebarExpandButton"] span,
+[data-testid="collapsedControl"] span {
+    font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', sans-serif !important;
+}
+
+/* ── Sidebar ── */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg,
+        color-mix(in srgb, var(--bg-secondary) 95%, var(--f1-red) 5%) 0%,
+        var(--bg-primary) 100%) !important;
+    border-right: 1px solid var(--glass-border) !important;
+}
+/* Scope the font override to text-bearing elements only, explicitly
+   excluding icon glyphs so they keep rendering as symbols. */
+[data-testid="stSidebar"] :not([data-testid="stIconMaterial"]) {
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Sidebar nav links — uppercase ── */
+[data-testid="stSidebarNav"] a span,
+[data-testid="stSidebarNavLink"] span {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    color: var(--chrome-text-secondary) !important;
+}
+[data-testid="stSidebarNavLink"]:hover span { color: var(--chrome-text-primary) !important; }
+[data-testid="stSidebarNavLink"][aria-current="page"] span { color: var(--f1-red) !important; }
+[data-testid="stSidebarNavLink"][aria-current="page"] {
+    background: rgba(225,6,0,0.08) !important;
+    border-left: 2px solid var(--f1-red) !important;
+}
+[data-testid="stSidebarNavLink"] {
+    border-radius: 4px !important;
+    padding: 0.3rem 0.6rem !important;
+    border-left: 2px solid transparent !important;
+    transition: background 0.15s ease;
+}
+
+/* ── Sidebar collapse / expand buttons — NEVER hide ── */
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stSidebarExpandButton"],
+[data-testid="collapsedControl"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 1000 !important;
+}
+[data-testid="stSidebarCollapseButton"] button,
+[data-testid="stSidebarExpandButton"] button,
+[data-testid="collapsedControl"] button {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: var(--chrome-text-secondary) !important;
+}
+[data-testid="stSidebarCollapseButton"] button:hover,
+[data-testid="stSidebarExpandButton"] button:hover,
+[data-testid="collapsedControl"] button:hover {
+    color: var(--f1-red) !important;
+}
+
+/* ── Glass card ── */
+.glass-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 1.2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+.glass-card::before {
+    content: '';
+    position: absolute; top:0; left:0; right:0; height:1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+}
+.glass-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--glass-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+}
+
+/* ── KPI card ── */
+.kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative; overflow: hidden;
+}
+.kpi-card::after {
+    content: ''; position: absolute; bottom:0; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, var(--f1-red), transparent);
+    opacity: 0; transition: opacity 0.3s;
+}
+.kpi-card:hover::after { opacity: 1; }
+.kpi-card:hover {
+    border-color: var(--glass-accent);
+    box-shadow: var(--glow-red);
+    transform: translateY(-3px);
+}
+.kpi-value { font-size:2rem; font-weight:800; color:var(--text-primary); line-height:1; margin-bottom:0.3rem; }
+.kpi-label { font-size:0.68rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.12em; }
+.kpi-sub   { font-size:0.78rem; color:var(--f1-red); font-weight:600; margin-top:0.2rem; }
+
+/* ── Page header ── */
+.page-header { padding:1rem 0 1.2rem; border-bottom:1px solid var(--glass-border); margin-bottom:1.5rem; }
+.page-title {
+    font-size:2.2rem; font-weight:900; letter-spacing:-0.03em; margin:0;
+    background: linear-gradient(135deg, var(--chrome-text-primary) 55%, var(--chrome-text-secondary));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.page-subtitle { font-size:0.88rem; color:var(--chrome-text-secondary); margin-top:0.3rem; }
+.accent-line { width:48px; height:3px; background:linear-gradient(90deg,var(--f1-red),transparent); border-radius:2px; margin-top:0.7rem; }
+
+/* ── Section header ── */
+.section-header { display:flex; align-items:center; gap:0.7rem; margin-bottom:0.9rem; }
+.section-dot { width:7px; height:7px; background:var(--f1-red); border-radius:50%; box-shadow:0 0 8px var(--f1-red); flex-shrink:0; }
+.section-title { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; color:var(--chrome-text-secondary); }
+
+/* ── Countdown blocks ── */
+.countdown-block {
+    background:var(--bg-card); border:1px solid var(--glass-border);
+    border-radius:8px; padding:0.7rem 1rem; text-align:center; min-width:65px;
+}
+.countdown-num { font-size:2rem; font-weight:800; color:var(--f1-red); font-family:'JetBrains Mono',monospace; line-height:1; }
+.countdown-unit { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--chrome-text-secondary); margin-top:2px; }
+
+/* ── Standings / data tables ── */
+.standings-table, .timing-table { width:100%; border-collapse:collapse; font-size:0.88rem; color:var(--text-primary); }
+.standings-table th, .timing-table th {
+    color:var(--text-muted); font-size:0.66rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.1em; padding:0.55rem 0.7rem; border-bottom:1px solid var(--glass-border); text-align:left;
+}
+.standings-table td, .timing-table td {
+    padding:0.6rem 0.7rem; border-bottom:1px solid var(--divider-soft); vertical-align:middle;
+}
+.standings-table tr:hover td, .timing-table tr:hover td { background:var(--overlay-soft); }
+.standings-table .pos { font-weight:800; color:var(--text-muted); width:28px; }
+.standings-table .pos-1 { color:var(--f1-gold); }
+.standings-table .pos-2 { color:var(--f1-silver); }
+.standings-table .pos-3 { color:var(--f1-bronze); }
+.standings-table .driver-name { font-weight:600; }
+.standings-table .points { font-weight:700; text-align:right; }
+
+/* ── Status badges ── */
+.status-badge {
+    display:inline-flex; align-items:center; gap:5px;
+    padding:3px 9px; border-radius:20px; font-size:0.7rem; font-weight:600;
+}
+.status-live { background:rgba(225,6,0,0.2); color:#ff4444; border:1px solid rgba(225,6,0,0.4); }
+.status-live::before {
+    content:''; display:inline-block; width:6px; height:6px; background:#E10600;
+    border-radius:50%; animation:pulse 1.5s infinite;
+}
+.status-upcoming { background:rgba(255,215,0,0.12); color:#c9971f; border:1px solid rgba(255,215,0,0.3); }
+.status-finished { background:var(--overlay-soft); color:var(--text-muted); border:1px solid var(--glass-border); }
+.status-funding  { background:rgba(255,215,0,0.1); color:#c9971f; border:1px solid rgba(255,215,0,0.35); }
+
+/* ── Tire badges ── */
+.tire-badge { display:inline-block; width:24px; height:24px; border-radius:50%; font-size:0.6rem; font-weight:800; text-align:center; line-height:24px; }
+.tire-soft   { background:#E8002D; color:#fff; }
+.tire-medium { background:#FFF200; color:#000; }
+.tire-hard   { background:#FFF;    color:#000; }
+.tire-inter  { background:#43B02A; color:#fff; }
+.tire-wet    { background:#0067FF; color:#fff; }
+
+/* ── Divider ── */
+.f1-divider { height:1px; background:linear-gradient(90deg,var(--f1-red),var(--glass-border),transparent); margin:1.2rem 0; border:none; }
+
+/* ── Animations ── */
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+.fade-in { animation:fadeInUp 0.35s ease forwards; }
+
+/* ── Plotly overrides ── */
+.js-plotly-plot .plotly .bg { fill:transparent !important; }
+.modebar { background:transparent !important; }
+.modebar-btn path { fill: var(--text-muted) !important; }
+
+/* ── Streamlit component overrides ── */
+.stSelectbox > div > div,
+.stMultiSelect > div > div,
+.stTextInput input,
+.stNumberInput input,
+[data-baseweb="select"] > div {
+    background: var(--bg-secondary) !important;
+    border-color: var(--glass-border) !important;
+    border-radius: 8px !important;
+    color: var(--chrome-text-primary) !important;
+}
+[data-baseweb="popover"] li {
+    color: var(--chrome-text-primary) !important;
+    background: var(--bg-secondary) !important;
+}
+[data-baseweb="popover"] li:hover { background: var(--overlay-soft) !important; }
+[data-baseweb="tag"] { background: var(--overlay-soft) !important; color: var(--chrome-text-primary) !important; }
+
+.stButton > button {
+    background: var(--f1-red) !important;
+    color: white !important; border: none !important;
+    border-radius: 8px !important; font-weight: 600 !important;
+    font-family: 'Inter', sans-serif !important;
+    transition: all 0.2s ease !important;
+}
+.stButton > button:hover {
+    background: var(--f1-red-dark) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--glow-red) !important;
+}
+/* Secondary/plain buttons (kind="secondary", used for e.g. the theme
+   toggle) shouldn't be solid red — that's reserved for primary actions. */
+.stButton > button[kind="secondary"] {
+    background: var(--bg-card) !important;
+    color: var(--chrome-text-primary) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.stButton > button[kind="secondary"]:hover {
+    background: var(--bg-card-hover) !important;
+    box-shadow: none !important;
+}
+
+.stTabs [data-baseweb="tab-list"] {
+    background: transparent !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+}
+.stTabs [data-baseweb="tab"] {
+    background: transparent !important;
+    color: var(--chrome-text-secondary) !important;
+    border-bottom: 2px solid transparent !important;
+    font-size: 0.85rem !important; font-weight: 500 !important;
+    padding: 0.55rem 1.1rem !important;
+}
+.stTabs [aria-selected="true"] {
+    color: var(--chrome-text-primary) !important;
+    border-bottom-color: var(--f1-red) !important;
+    background: transparent !important;
+}
+.stProgress > div > div {
+    background: linear-gradient(90deg, var(--f1-red), #ff4444) !important;
+    border-radius: 4px !important;
+}
+[data-testid="metric-container"] {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 14px !important; padding: 1rem !important;
+}
+[data-testid="stMetricValue"] { color: var(--text-primary) !important; }
+[data-testid="stMetricLabel"] { color: var(--text-muted) !important; }
+
+[data-testid="stAlert"] { border-radius: 10px !important; }
+[data-testid="stExpander"] {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 12px !important;
+}
+[data-testid="stDataFrame"], [data-testid="stTable"] {
+    border-radius: 10px !important;
+    border: 1px solid var(--glass-border) !important;
+}
+
+/* ── Scrollbars (nice, subtle, theme-aware) ── */
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--glass-accent); }
+
+/* ── Prevent dimming/fade during autorefresh reruns ── */
+[data-testid="stAppViewContainer"] { transition: none !important; }
+.main .block-container { opacity: 1 !important; transition: none !important; }
+[data-testid="stStatusWidget"] { opacity: 0.7 !important; }
+div[data-stale="true"] { opacity: 1 !important; filter: none !important; }
+.stApp > div:first-child { transition: none !important; }
+
+/* ── Funding notice banner (Live page) ── */
+.funding-banner {
+    background: linear-gradient(135deg, rgba(255,215,0,0.08) 0%, var(--bg-card) 60%);
+    border: 1px solid rgba(255,215,0,0.3);
+    border-left: 4px solid #c9971f;
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap;
+}
+.funding-banner .fb-icon { font-size: 1.6rem; flex-shrink: 0; }
+.funding-banner .fb-text { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; }
+.funding-banner .fb-text b { color: var(--text-primary); }
+.funding-banner a { color: var(--f1-red); font-weight: 600; text-decoration: none; }
+.funding-banner a:hover { text-decoration: underline; }

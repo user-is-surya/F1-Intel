@@ -1,0 +1,22 @@
+# Never commit real secrets — only secrets.toml.example is tracked
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# FastF1 telemetry cache (large, regenerable)
+data/cache/
+
+# Generated race stories (optional to ignore — comment out if you want
+# to keep these in version control as a content backup)
+# data/race_stories/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS/editor noise
+.DS_Store
+.idea/
+*.swp
