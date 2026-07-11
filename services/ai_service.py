@@ -11,6 +11,15 @@ API key comes from .streamlit/secrets.toml under [gemini] api_key — see
 All functions degrade gracefully when no key is configured: they return
 a clear status dict rather than raising, so calling pages can show a
 friendly "AI features need a Gemini API key" message instead of crashing.
+
+SEARCH GROUNDING: Gemini's knowledge is frozen at its training cutoff
+(currently ~January 2025 for every current model, 2.5 through 3.5 — see
+https://ai.google.dev/gemini-api/docs/gemini-3). Pass use_search=True to
+let the model run real Google searches during generation instead of
+answering from memory alone. Off by default: the race-story generator
+already gets fresh facts via the prompt context, so it doesn't need it
+and enabling it there would just add latency/cost for no benefit. The
+open-ended F1 chat is the feature that actually needs this.
 """
 
 from __future__ import annotations
@@ -56,17 +65,45 @@ def _get_client():
         return None
 
 
+def _search_tool():
+    """Build the Google Search grounding tool. Imported lazily so this
+    module still loads fine even if the installed google-genai version
+    doesn't expose GoogleSearch for some reason."""
+    from google.genai import types
+    return types.Tool(google_search=types.GoogleSearch())
+
+
+def _extract_search_queries(response) -> list[str]:
+    """Pull out which search queries (if any) the model actually ran,
+    so callers can show 'searched for: ...' instead of a silent guess
+    about whether grounding did anything."""
+    try:
+        candidate = response.candidates[0]
+        metadata = getattr(candidate, "grounding_metadata", None)
+        if metadata and getattr(metadata, "web_search_queries", None):
+            return list(metadata.web_search_queries)
+    except Exception:
+        pass
+    return []
+
+
 def generate_text(
     prompt: str,
     system_instruction: str | None = None,
     temperature: float = 0.7,
     max_output_tokens: int = 4096,
+    use_search: bool = False,
 ) -> dict:
     """
     Generate text from Gemini. Returns:
-      {"ok": True, "text": "..."} on success
+      {"ok": True, "text": "...", "search_queries": [...]} on success
       {"ok": False, "error": "user-friendly message", "detail": "raw exception str"} on failure
     Never raises — always check result["ok"] before using result["text"].
+
+    use_search: if True, lets Gemini run real Google searches while
+    answering (fixes "outdated answers" for anything after its training
+    cutoff). Adds latency and a small per-grounded-prompt cost — see
+    https://ai.google.dev/gemini-api/docs/pricing.
     """
     if not is_configured():
         return {
@@ -91,6 +128,8 @@ def generate_text(
         )
         if system_instruction:
             config.system_instruction = system_instruction
+        if use_search:
+            config.tools = [_search_tool()]
 
         response = client.models.generate_content(
             model=get_model_name(),
@@ -104,7 +143,7 @@ def generate_text(
                 "error": "Gemini returned an empty response. Try again in a moment.",
                 "detail": "empty_response",
             }
-        return {"ok": True, "text": text}
+        return {"ok": True, "text": text, "search_queries": _extract_search_queries(response)}
 
     except Exception as e:
         err_str = str(e)
@@ -128,10 +167,15 @@ def generate_chat_reply(
     messages: list[dict],
     system_instruction: str | None = None,
     temperature: float = 0.4,
+    use_search: bool = False,
 ) -> dict:
     """
     Multi-turn chat. messages = [{"role": "user"|"model", "text": "..."}]
-    Returns the same {"ok", "text"/"error"} shape as generate_text.
+    Returns the same {"ok", "text"/"error", "search_queries"} shape as generate_text.
+
+    use_search: if True, lets Gemini run real Google searches while
+    replying — this is what the F1 Knowledge Chat should pass, since it's
+    the feature people actually notice giving outdated answers.
     """
     if not is_configured():
         return {
@@ -162,6 +206,8 @@ def generate_chat_reply(
         config = types.GenerateContentConfig(temperature=temperature, max_output_tokens=2048)
         if system_instruction:
             config.system_instruction = system_instruction
+        if use_search:
+            config.tools = [_search_tool()]
 
         response = client.models.generate_content(
             model=get_model_name(),
@@ -171,7 +217,7 @@ def generate_chat_reply(
         text = getattr(response, "text", None)
         if not text:
             return {"ok": False, "error": "Gemini returned an empty response.", "detail": "empty_response"}
-        return {"ok": True, "text": text}
+        return {"ok": True, "text": text, "search_queries": _extract_search_queries(response)}
 
     except Exception as e:
         err_str = str(e)
