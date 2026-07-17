@@ -46,7 +46,7 @@ def load_css(path: str | None = None) -> None:
         css = _read_css_file(path)
 
     st.markdown(
-        f"<style>\n:root {{\n{var_block}\n}}\n{css}\n</style>",
+        f"<style>\n{css}\n:root {{\n{var_block}\n}}\n</style>",
         unsafe_allow_html=True,
     )
 
