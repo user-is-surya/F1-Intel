@@ -13,7 +13,10 @@ from config.settings import FASTF1_CACHE_DIR, CURRENT_SEASON
 
 log = logging.getLogger(__name__)
 fastf1.Cache.enable_cache(FASTF1_CACHE_DIR)
-fastf1.set_log_level("ERROR")  # suppress FastF1 verbose logging
+fastf1.set_log_level("WARNING")  # was "ERROR" — that silenced FastF1's own
+# diagnostic messages about exactly which piece of data failed to load and
+# why (e.g. "Failed to load lap data!"). WARNING surfaces those without
+# being as noisy as INFO/DEBUG.
 
 
 @st.cache_resource(show_spinner=False)
