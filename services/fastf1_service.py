@@ -18,32 +18,52 @@ fastf1.set_log_level("ERROR")  # suppress FastF1 verbose logging
 
 @st.cache_resource(show_spinner=False)
 def load_session(season: int, gp: int, session: str) -> Optional[fastf1.core.Session]:
-    try:
-        s = fastf1.get_session(season, gp, session)
-        s.load(telemetry=True, weather=True, messages=True, laps=True)
-        return s
-    except Exception as e:
-        # This used to be log.debug(), which is essentially invisible —
-        # Streamlit Cloud's log viewer doesn't show DEBUG-level messages
-        # by default, so a failure here looked like "no error at all"
-        # even though something real was going wrong. log.error() (and
-        # the print() as a belt-and-suspenders, since Cloud's log viewer
-        # captures stdout too) makes the actual reason show up.
-        log.error("FastF1 load_session(%s, %s, %s) failed: %s", season, gp, session, e)
-        print(f"[FastF1] load_session({season}, {gp}, {session}) failed: {e!r}")
-        return None
+    for attempt in range(2):
+        try:
+            s = fastf1.get_session(season, gp, session)
+            s.load(telemetry=True, weather=True, messages=True, laps=True)
+            # On a freshly-woken (cold) container, the network call for the
+            # detailed lap-by-lap timing data can be flaky and FastF1 hands
+            # back an empty result WITHOUT raising — so "no exception" isn't
+            # proof it actually worked. Catch that case and retry once.
+            if (s.laps is None or s.laps.empty) and attempt == 0:
+                log.warning("FastF1 load_session(%s, %s, %s): laps came back empty, retrying once", season, gp, session)
+                print(f"[FastF1] load_session({season}, {gp}, {session}): laps empty, retrying")
+                continue
+            return s
+        except Exception as e:
+            # This used to be log.debug(), which is essentially invisible —
+            # Streamlit Cloud's log viewer doesn't show DEBUG-level messages
+            # by default, so a failure here looked like "no error at all"
+            # even though something real was going wrong. log.error() (and
+            # the print() as a belt-and-suspenders, since Cloud's log viewer
+            # captures stdout too) makes the actual reason show up.
+            log.error("FastF1 load_session(%s, %s, %s) failed: %s", season, gp, session, e)
+            print(f"[FastF1] load_session({season}, {gp}, {session}) failed: {e!r}")
+            if attempt == 0:
+                continue
+            return None
+    return None
 
 
 @st.cache_resource(show_spinner=False)
 def load_session_basic(season: int, gp: int, session: str) -> Optional[fastf1.core.Session]:
-    try:
-        s = fastf1.get_session(season, gp, session)
-        s.load(telemetry=False, weather=True, messages=True, laps=True)
-        return s
-    except Exception as e:
-        log.error("FastF1 load_session_basic(%s, %s, %s) failed: %s", season, gp, session, e)
-        print(f"[FastF1] load_session_basic({season}, {gp}, {session}) failed: {e!r}")
-        return None
+    for attempt in range(2):
+        try:
+            s = fastf1.get_session(season, gp, session)
+            s.load(telemetry=False, weather=True, messages=True, laps=True)
+            if (s.laps is None or s.laps.empty) and attempt == 0:
+                log.warning("FastF1 load_session_basic(%s, %s, %s): laps came back empty, retrying once", season, gp, session)
+                print(f"[FastF1] load_session_basic({season}, {gp}, {session}): laps empty, retrying")
+                continue
+            return s
+        except Exception as e:
+            log.error("FastF1 load_session_basic(%s, %s, %s) failed: %s", season, gp, session, e)
+            print(f"[FastF1] load_session_basic({season}, {gp}, {session}) failed: {e!r}")
+            if attempt == 0:
+                continue
+            return None
+    return None
 
 
 def get_laps(session: fastf1.core.Session) -> pd.DataFrame:
