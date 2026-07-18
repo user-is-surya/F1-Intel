@@ -13,10 +13,11 @@ from config.settings import FASTF1_CACHE_DIR, CURRENT_SEASON
 
 log = logging.getLogger(__name__)
 fastf1.Cache.enable_cache(FASTF1_CACHE_DIR)
-fastf1.set_log_level("WARNING")  # was "ERROR" — that silenced FastF1's own
-# diagnostic messages about exactly which piece of data failed to load and
-# why (e.g. "Failed to load lap data!"). WARNING surfaces those without
-# being as noisy as INFO/DEBUG.
+fastf1.set_log_level("DEBUG")  # TEMPORARY — need the actual underlying
+# network exception (timeout vs 403 vs connection refused), not just
+# FastF1's summarized "Failed to load X!" warnings. Turn this back down
+# to "WARNING" once we've confirmed what's actually happening — DEBUG is
+# very noisy and will bloat the logs if left on.
 
 
 @st.cache_resource(show_spinner=False)
